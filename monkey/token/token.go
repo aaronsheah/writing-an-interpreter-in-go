@@ -36,8 +36,8 @@ const (
 
 	LeftParen  = Type("(")
 	RightParen = Type(")")
-	LeftBrace  = Type("[")
-	RightBrace = Type("]")
+	LeftBrace  = Type("{")
+	RightBrace = Type("}")
 )
 
 // Keywords
