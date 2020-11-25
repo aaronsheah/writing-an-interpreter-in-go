@@ -21,16 +21,7 @@ func TestNextToken(t *testing.T) {
 		{Type: token.Semicolon, Literal: ";"},
 	}
 
-	for _, expectedToken := range expectedTokens {
-		output := l.NextToken()
-
-		if output.Type != expectedToken.Type {
-			t.Fatalf("Wrong token type. expected:%q, got:%q", expectedToken.Type, output.Type)
-		}
-		if output.Literal != expectedToken.Literal {
-			t.Fatalf("Wrong token literal. expected:%q, got:%q", expectedToken.Literal, output.Literal)
-		}
-	}
+	checkNextChar(t, l, expectedTokens)
 }
 
 func TestNextToken_GivenCode(t *testing.T) {
@@ -90,6 +81,37 @@ func TestNextToken_GivenCode(t *testing.T) {
 		{Type: token.EOF, Literal: ""},
 	}
 
+	checkNextChar(t, l, expectedTokens)
+}
+
+func TestNextToken_SupportBoolean(t *testing.T) {
+	testParams := []struct {
+		Input          string
+		ExpectedTokens []token.Token
+	}{
+		{
+			`false;`,
+			[]token.Token{
+				{Type: token.False, Literal: "false"},
+				{Type: token.Semicolon, Literal: ";"},
+			},
+		},
+		{
+			`true;`,
+			[]token.Token{
+				{Type: token.True, Literal: "true"},
+				{Type: token.Semicolon, Literal: ";"},
+			},
+		},
+	}
+
+	for _, testParam := range testParams {
+		l := New(testParam.Input)
+		checkNextChar(t, l, testParam.ExpectedTokens)
+	}
+}
+
+func checkNextChar(t *testing.T, l *Lexer, expectedTokens []token.Token) {
 	for _, expectedToken := range expectedTokens {
 		output := l.NextToken()
 

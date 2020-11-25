@@ -44,10 +44,14 @@ const (
 const (
 	Function = Type("FUNCTION")
 	Let      = Type("LET")
+	True     = Type("TRUE")
+	False    = Type("FALSE")
 )
 
 // KeywordToTokenType - map of keyword string to its corresponding token type
 var KeywordToTokenType = map[string]Type{
-	"fn":  Function,
-	"let": Let,
+	"fn":    Function,
+	"let":   Let,
+	"true":  True,
+	"false": False,
 }
