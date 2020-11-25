@@ -56,14 +56,16 @@ const (
 	False    = Type("FALSE")
 	If       = Type("if")
 	Else     = Type("else")
+	Return   = Type("return")
 )
 
 // KeywordToTokenType - map of keyword string to its corresponding token type
 var KeywordToTokenType = map[string]Type{
-	"fn":    Function,
-	"let":   Let,
-	"true":  True,
-	"false": False,
-	"if":    If,
-	"else":  Else,
+	"fn":     Function,
+	"let":    Let,
+	"true":   True,
+	"false":  False,
+	"if":     If,
+	"else":   Else,
+	"return": Return,
 }

@@ -239,6 +239,47 @@ func TestNextToken_SupportIfElse(t *testing.T) {
 	}
 }
 
+func TestNextToken_SupportFuncAndReturn(t *testing.T) {
+	testParams := []struct {
+		Input          string
+		ExpectedTokens []token.Token
+	}{
+		{
+			`
+			let add = fn(x,y) {
+				return x + y;
+			};
+			`,
+			[]token.Token{
+				{Type: token.Let, Literal: "let"},
+				{Type: token.Ident, Literal: "add"},
+				{Type: token.Assign, Literal: "="},
+				{Type: token.Function, Literal: "fn"},
+				{Type: token.LeftParen, Literal: "("},
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.Comma, Literal: ","},
+				{Type: token.Ident, Literal: "y"},
+				{Type: token.RightParen, Literal: ")"},
+				{Type: token.LeftBrace, Literal: "{"},
+
+				{Type: token.Return, Literal: "return"},
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.Plus, Literal: "+"},
+				{Type: token.Ident, Literal: "y"},
+				{Type: token.Semicolon, Literal: ";"},
+
+				{Type: token.RightBrace, Literal: "}"},
+				{Type: token.Semicolon, Literal: ";"},
+			},
+		},
+	}
+
+	for _, testParam := range testParams {
+		l := New(testParam.Input)
+		checkNextChar(t, l, testParam.ExpectedTokens)
+	}
+}
+
 func checkNextChar(t *testing.T, l *Lexer, expectedTokens []token.Token) {
 	for _, expectedToken := range expectedTokens {
 		output := l.NextToken()
