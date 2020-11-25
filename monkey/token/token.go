@@ -35,6 +35,8 @@ const (
 	GreaterThan      = Type(">")
 	LessThanEqual    = Type("<=")
 	GreaterThanEqual = Type(">=")
+	Equal            = Type("==")
+	NotEqual         = Type("==")
 )
 
 // Delimiters

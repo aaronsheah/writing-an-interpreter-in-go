@@ -280,6 +280,37 @@ func TestNextToken_SupportFuncAndReturn(t *testing.T) {
 	}
 }
 
+func TestNewToken_SupportComparisonOperators(t *testing.T) {
+	testParams := []struct {
+		Input          string
+		ExpectedTokens []token.Token
+	}{
+		{
+			`1 == 2;`,
+			[]token.Token{
+				{Type: token.Int, Literal: "1"},
+				{Type: token.Equal, Literal: "=="},
+				{Type: token.Int, Literal: "2"},
+				{Type: token.Semicolon, Literal: ";"},
+			},
+		},
+		{
+			`1 != 2;`,
+			[]token.Token{
+				{Type: token.Int, Literal: "1"},
+				{Type: token.Equal, Literal: "!="},
+				{Type: token.Int, Literal: "2"},
+				{Type: token.Semicolon, Literal: ";"},
+			},
+		},
+	}
+
+	for _, testParam := range testParams {
+		l := New(testParam.Input)
+		checkNextChar(t, l, testParam.ExpectedTokens)
+	}
+}
+
 func checkNextChar(t *testing.T, l *Lexer, expectedTokens []token.Token) {
 	for _, expectedToken := range expectedTokens {
 		output := l.NextToken()

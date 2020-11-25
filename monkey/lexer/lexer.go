@@ -36,8 +36,14 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.char {
 	case '=':
-		outputToken.Type = token.Assign
-		outputToken.Literal = string(l.char)
+		if l.peekChar() == '=' {
+			outputToken.Type = token.Equal
+			outputToken.Literal = "=="
+			l.readChar()
+		} else {
+			outputToken.Type = token.Assign
+			outputToken.Literal = "="
+		}
 	case '+':
 		outputToken.Type = token.Plus
 		outputToken.Literal = string(l.char)
@@ -70,8 +76,14 @@ func (l *Lexer) NextToken() token.Token {
 		outputToken.Type = token.Minus
 		outputToken.Literal = string(l.char)
 	case '!':
-		outputToken.Type = token.Bang
-		outputToken.Literal = string(l.char)
+		if l.peekChar() == '=' {
+			outputToken.Type = token.NotEqual
+			outputToken.Literal = "!="
+			l.readChar()
+		} else {
+			outputToken.Type = token.Bang
+			outputToken.Literal = "!"
+		}
 	case '*':
 		outputToken.Type = token.Asterisk
 		outputToken.Literal = string(l.char)
@@ -152,4 +164,11 @@ func (l *Lexer) readNumber() string {
 	}
 	// grab the identifier
 	return l.input[originalPosition:l.position]
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+	return l.input[l.readPosition]
 }
