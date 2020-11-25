@@ -177,6 +177,68 @@ func TestNextToken_SupportMathematicalOperators(t *testing.T) {
 	}
 }
 
+func TestNextToken_SupportIfElse(t *testing.T) {
+	testParams := []struct {
+		Input          string
+		ExpectedTokens []token.Token
+	}{
+		{
+			`
+				let x = 42;
+				let theAnswer;
+				if (x < 42) {
+					theAnswer = true;
+				}
+				else {
+					theAnswer = false;
+				}
+			`,
+			[]token.Token{
+
+				{Type: token.Let, Literal: "let"},
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.Assign, Literal: "="},
+				{Type: token.Int, Literal: "42"},
+				{Type: token.Semicolon, Literal: ";"},
+
+				{Type: token.Let, Literal: "let"},
+				{Type: token.Ident, Literal: "theAnswer"},
+				{Type: token.Semicolon, Literal: ";"},
+
+				{Type: token.If, Literal: "if"},
+				{Type: token.LeftParen, Literal: "("},
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.LessThan, Literal: "<"},
+				{Type: token.Int, Literal: "42"},
+				{Type: token.RightParen, Literal: ")"},
+				{Type: token.LeftBrace, Literal: "{"},
+
+				{Type: token.Ident, Literal: "theAnswer"},
+				{Type: token.Assign, Literal: "="},
+				{Type: token.True, Literal: "true"},
+				{Type: token.Semicolon, Literal: ";"},
+
+				{Type: token.RightBrace, Literal: "}"},
+
+				{Type: token.Else, Literal: "else"},
+				{Type: token.LeftBrace, Literal: "{"},
+
+				{Type: token.Ident, Literal: "theAnswer"},
+				{Type: token.Assign, Literal: "="},
+				{Type: token.False, Literal: "false"},
+				{Type: token.Semicolon, Literal: ";"},
+
+				{Type: token.RightBrace, Literal: "}"},
+			},
+		},
+	}
+
+	for _, testParam := range testParams {
+		l := New(testParam.Input)
+		checkNextChar(t, l, testParam.ExpectedTokens)
+	}
+}
+
 func checkNextChar(t *testing.T, l *Lexer, expectedTokens []token.Token) {
 	for _, expectedToken := range expectedTokens {
 		output := l.NextToken()

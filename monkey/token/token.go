@@ -54,6 +54,8 @@ const (
 	Let      = Type("LET")
 	True     = Type("TRUE")
 	False    = Type("FALSE")
+	If       = Type("if")
+	Else     = Type("else")
 )
 
 // KeywordToTokenType - map of keyword string to its corresponding token type
@@ -62,4 +64,6 @@ var KeywordToTokenType = map[string]Type{
 	"let":   Let,
 	"true":  True,
 	"false": False,
+	"if":    If,
+	"else":  Else,
 }
