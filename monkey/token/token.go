@@ -25,8 +25,16 @@ const (
 
 // Operators
 const (
-	Assign = Type("=")
-	Plus   = Type("+")
+	Assign           = Type("=")
+	Plus             = Type("+")
+	Minus            = Type("-")
+	Bang             = Type("!")
+	Asterisk         = Type("*")
+	Slash            = Type("/")
+	LessThan         = Type("<")
+	GreaterThan      = Type(">")
+	LessThanEqual    = Type("<=")
+	GreaterThanEqual = Type(">=")
 )
 
 // Delimiters

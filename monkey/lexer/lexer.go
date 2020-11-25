@@ -65,6 +65,26 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		outputToken.Type = token.RightBrace
 		outputToken.Literal = string(l.char)
+
+	case '-':
+		outputToken.Type = token.Minus
+		outputToken.Literal = string(l.char)
+	case '!':
+		outputToken.Type = token.Bang
+		outputToken.Literal = string(l.char)
+	case '*':
+		outputToken.Type = token.Asterisk
+		outputToken.Literal = string(l.char)
+	case '/':
+		outputToken.Type = token.Slash
+		outputToken.Literal = string(l.char)
+	case '<':
+		outputToken.Type = token.LessThan
+		outputToken.Literal = string(l.char)
+	case '>':
+		outputToken.Type = token.GreaterThan
+		outputToken.Literal = string(l.char)
+
 	case 0: // NUL char
 		outputToken.Type = token.EOF
 		outputToken.Literal = ""

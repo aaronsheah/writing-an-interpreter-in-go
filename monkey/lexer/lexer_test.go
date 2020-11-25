@@ -111,6 +111,43 @@ func TestNextToken_SupportBoolean(t *testing.T) {
 	}
 }
 
+func TestNextToken_SupportLogicalOperators(t *testing.T) {
+	testParams := []struct {
+		Input          string
+		ExpectedTokens []token.Token
+	}{
+		{
+			`x < 5;`,
+			[]token.Token{
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.LessThan, Literal: "<"},
+				{Type: token.Int, Literal: "5"},
+			},
+		},
+		{
+			`x > 5;`,
+			[]token.Token{
+				{Type: token.Ident, Literal: "x"},
+				{Type: token.GreaterThan, Literal: ">"},
+				{Type: token.Int, Literal: "5"},
+			},
+		},
+		{
+			`5 - 1;`,
+			[]token.Token{
+				{Type: token.Int, Literal: "5"},
+				{Type: token.Minus, Literal: "-"},
+				{Type: token.Int, Literal: "1"},
+			},
+		},
+	}
+
+	for _, testParam := range testParams {
+		l := New(testParam.Input)
+		checkNextChar(t, l, testParam.ExpectedTokens)
+	}
+}
+
 func checkNextChar(t *testing.T, l *Lexer, expectedTokens []token.Token) {
 	for _, expectedToken := range expectedTokens {
 		output := l.NextToken()
