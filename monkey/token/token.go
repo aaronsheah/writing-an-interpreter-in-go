@@ -42,6 +42,12 @@ const (
 
 // Keywords
 const (
-	Function = "FUNCTION"
-	Let      = "LET"
+	Function = Type("FUNCTION")
+	Let      = Type("LET")
 )
+
+// KeywordToTokenType - map of keyword string to its corresponding token type
+var KeywordToTokenType = map[string]Type{
+	"fn":  Function,
+	"let": Let,
+}
