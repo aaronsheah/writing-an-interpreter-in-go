@@ -18,6 +18,7 @@ func TestLetStatements(t *testing.T) {
 	p := New(l)
 
 	program := p.ParseProgram()
+	checkParserErrors(t, p)
 
 	if program == nil {
 		t.Fatalf("ParseProgram() returned nil")
@@ -85,5 +86,37 @@ func TestLetStatmentError(t *testing.T) {
 	// THEN
 	if len(p.Errors()) != 3 {
 		t.Fatalf("Expect 3 errors")
+	}
+}
+
+func TestReturnStatements(t *testing.T) {
+	input := `
+		return 5;
+		return true;
+		return "test";
+	`
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if program == nil {
+		t.Fatalf("ParseProgram() returned nil")
+	}
+
+	if len(program.Statements) != 3 {
+		t.Fatalf("Incorrect number of statements parsed. Got %d statements", len(program.Statements))
+	}
+
+	for _, statement := range program.Statements {
+		returnStatement, ok := statement.(*ast.ReturnStatement)
+		if !ok {
+			t.Errorf("statment is not a ReturnStatement. got=%T", statement)
+		}
+		if returnStatement.TokenLiteral() != "return" {
+			t.Errorf("token literal should be 'return', got %q", returnStatement.TokenLiteral())
+		}
 	}
 }

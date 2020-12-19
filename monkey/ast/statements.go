@@ -19,3 +19,18 @@ func (ls *LetStatement) Token() token.Token {
 func (ls *LetStatement) TokenLiteral() string {
 	return ls.Token().Literal
 }
+
+type ReturnStatement struct {
+	ReturnValue Expression
+}
+
+func (rs *ReturnStatement) statementNode() {}
+func (rs *ReturnStatement) Token() token.Token {
+	return token.Token{
+		Type:    token.Return,
+		Literal: "return",
+	}
+}
+func (rs *ReturnStatement) TokenLiteral() string {
+	return rs.Token().Literal
+}
