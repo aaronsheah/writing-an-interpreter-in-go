@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/aaronsheah/writing-an-interpreter-in-go/monkey/ast"
 	"github.com/aaronsheah/writing-an-interpreter-in-go/monkey/lexer"
 	"github.com/aaronsheah/writing-an-interpreter-in-go/monkey/token"
@@ -10,6 +12,8 @@ type Parser struct {
 	lexer   *lexer.Lexer
 	current token.Token
 	peek    token.Token
+
+	errors []string
 }
 
 func New(lexer *lexer.Lexer) *Parser {
@@ -53,7 +57,7 @@ func (p *Parser) parseLetStatement() ast.Statement {
 	statement := &ast.LetStatement{}
 
 	// Should have a name (aka Identifier)
-	if p.peek.Type != token.Ident {
+	if !p.peekTokenTypeIs(token.Ident) {
 		return nil
 	}
 
@@ -64,7 +68,7 @@ func (p *Parser) parseLetStatement() ast.Statement {
 	}
 
 	// Should have a assignment op after name
-	if p.peek.Type != token.Assign {
+	if !p.peekTokenTypeIs(token.Assign) {
 		return nil
 	}
 
@@ -81,8 +85,12 @@ func (p *Parser) parseLetStatement() ast.Statement {
 // peekTokenTypeIs - checks i the peeked token has the same type as the given type. If it is the same move the 'cursor' and return true
 func (p *Parser) peekTokenTypeIs(t token.Type) bool {
 	if p.peek.Type == t {
-		p.nextToken()
 		return true
 	}
+	p.errors = append(p.errors, fmt.Sprintf("Expected next token to be %s, got %s instead", t, p.peek.Type))
 	return false
+}
+
+func (p *Parser) Errors() []string {
+	return p.errors
 }

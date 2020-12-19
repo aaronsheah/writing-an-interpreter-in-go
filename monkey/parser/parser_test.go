@@ -56,3 +56,34 @@ func testLetStatement(t *testing.T, statement ast.Statement, expectedName string
 		t.Fatalf("expectedName not '%s', got=%s", expectedName, letStatement.Name.Value)
 	}
 }
+
+func checkParserErrors(t *testing.T, p *Parser) {
+	errors := p.Errors()
+
+	if len(errors) == 0 {
+		return
+	}
+
+	t.Errorf("parser has %d errors", len(errors))
+	for _, msg := range errors {
+		t.Errorf("parser error: %q", msg)
+	}
+	t.FailNow()
+}
+
+func TestLetStatmentError(t *testing.T) {
+	// GIVEN
+	input := `
+	let 123;
+	let x 5;
+	let = 10;
+	`
+	// WHEN
+	p := New(lexer.New(input))
+	p.ParseProgram()
+
+	// THEN
+	if len(p.Errors()) != 3 {
+		t.Fatalf("Expect 3 errors")
+	}
+}
