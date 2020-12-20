@@ -4,6 +4,7 @@ package ast
 
 type Node interface {
 	TokenLiteral() string
+	String() string
 }
 
 // Created separate interfaces for Statement and Expression for type checking
